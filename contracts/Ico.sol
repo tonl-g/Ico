@@ -25,7 +25,7 @@ contract Ico is Ownable {
         _token = IToken(tokenAddress);
         _owner = owner_;
         _buyers = buyers_;
-        _price = price;
+        _price = price_;
         _deadline = block.timestamp + delay_ * 14 days;
     }
 
