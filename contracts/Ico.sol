@@ -40,7 +40,7 @@ contract Ico is Ownable {
         _deposit(msg.sender, msg.value);
     }
 
-    function buyTokens(uint256 nbTokens) external payable returns (bool) {
+    function buyTokens(uint256 nbTokens) external payable onTime returns (bool) {
         require(msg.value >= 0, "ICO: Price is not 0 ether");
         require(nbTokens * _price <= msg.value, "ICO: Not enough Ether for purchase");
         uint256 _realPrice = nbTokens * _price;
@@ -55,7 +55,10 @@ contract Ico is Ownable {
     }
 
     function withdraw() external payable {
-
+        require(_token > 0, "Token: can not withdraw 0 token");
+        uint256 token = _nbTokens;
+        nbTokens = 0;
+        payable(msg.sender).sendValue(amount);
     }
 
     function getDeadline() public view returns (uint256) {
