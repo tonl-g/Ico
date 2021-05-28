@@ -15,14 +15,17 @@ contract Ico is Ownable {
     mapping(address => uint256) private _balances;
     mapping (address => mapping (address => uint256)) private _allowances;
     mapping(address => bool) private _buyers;
+    uint256 private _price;
     uint256 private _deadline;
 
     // Events
 
     // constructor
-    constructor(address tokenAddress, address owner_, uint256 delay_) Ownable(owner_) {
+    constructor(address tokenAddress, address buyers_, uint256 price_, uint256 delay_) Ownable(owner_) {
         _token = IToken(tokenAddress);
         _owner = owner_;
+        _buyers = buyers_;
+        _price = price;
         _deadline = block.timestamp + delay_ * 14 days;
     }
 
@@ -37,7 +40,17 @@ contract Ico is Ownable {
         _deposit(msg.sender, msg.value);
     }
 
-    function buyTokens() external payable {
+    function buyTokens(uint256 nbTokens) external payable returns (bool) {
+        require(msg.value >= 0, "ICO: Price is not 0 ether");
+        require(nbTokens * _price <= msg.value, "ICO: Not enough Ether for purchase");
+        uint256 _realPrice = nbTokens * _price;
+        uint256 _remaining = msg.value - _realPrice;
+        token.transferFrom(_buyers, msg.sender, nbTokens);
+        _buyers.transfer(_realPrice);
+        if(_remaining > 0) {
+            msg.sender.transfer(_remaining);
+        }
+        return true;
 
     }
 
@@ -67,9 +80,5 @@ contract Ico is Ownable {
         _balances[sender] += amount;
     }
 
-
-
-    
-  
 }
 
