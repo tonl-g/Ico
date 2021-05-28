@@ -28,7 +28,7 @@ contract Ico is Ownable {
 
     // Modifiers
     modifier onTime {
-        require(_deadline <= block.timestamp, "ICO: 2 weeks!");
+        require(_deadline <= block.timestamp, "ICO: Only 2 weeks!");
         _;
     }
 
