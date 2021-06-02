@@ -5,6 +5,25 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./IToken.sol";
 
 contract Token is IToken, ERC20 {
+    address private _reserve;
+
+    constructor(address reserve_, uint256 initialSupply) ERC20("Token", "TKN") {
+        _reserve = reserve_;
+        _mint(reserve_, initialSupply);
+    }
+
+    // getter
+    function reserve() public view returns (address) {
+        return _reserve;
+    }
+
+}
+
+/*
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "./IToken.sol";
+
+contract Token is IToken, ERC20 {
     mapping(address => uint256) private _balances;
     mapping(address => mapping(address => uint256)) private _allowances;
     uint256 private _totalSupply;
@@ -78,4 +97,5 @@ contract Token is IToken, ERC20 {
     function totalSupply(address owner) public pure override returns (uint256) {
         return _totalSupply[owner];
     }
-}
+
+} */
