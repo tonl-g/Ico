@@ -1,18 +1,14 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Address.sol";
 import "./Ownable.sol";
-import "./IToken.sol";
+import "./Token.sol";
 
 contract Ico is Ownable {
-    // Address of token seller
-    address payable private _owner;
+    Token private _token; //
+    // Address of token buyers
     address payable private _buyers;
     // State variables
-    mapping(address => uint256) private _balances;
-    mapping (address => mapping (address => uint256)) private _allowances;
-    IToken private _token;
     uint256 private _price;
     uint256 private _deadline;
 
@@ -20,8 +16,7 @@ contract Ico is Ownable {
 
     // constructor
     constructor(address tokenAddress, address payable owner_, address payable buyers_, uint256 price_, uint256 delay_) Ownable(owner_) {
-        _token = IToken(tokenAddress);
-        _owner = owner_;
+        _token = Token(tokenAddress); //
         _buyers = buyers_;
         _price = price_;
         _deadline = block.timestamp + delay_ * 14 days;
@@ -65,20 +60,11 @@ contract Ico is Ownable {
     }
 
     function setBuyers(address account) public {
-        _buyers[account] = !_buyers[account];
+        return _buyers[account] = !_buyers[account];
     }
 
-
-    function balanceOf(address account) public view returns (uint256) {
-        return _balances[account];
-    }
-
-    function allowance(address owner_, address spender) public view returns (uint256) {
-        return _allowances[owner_][spender];
-    }
-
-    function _deposit(address sender, uint256 amount) private {
-        _balances[sender] += amount;
+    function price() public view returns (uint256) {
+        return _price;
     }
 
 }
