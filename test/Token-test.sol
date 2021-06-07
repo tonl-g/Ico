@@ -3,6 +3,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 const { expect } = require('chai');
+const { ethers } = require('hardhat');
 
 describe('Token', async function () {
   let buyers, owner, Token, token;
